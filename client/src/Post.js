@@ -1,19 +1,18 @@
-export default function Post() {
+import {format} from 'date-fns';
+export default function Post({title,summary,cover,content,createdAt,author}) {
     return (
         <div className="post">
             <div className="image">
-                <img src="https://techcrunch.com/wp-content/uploads/2022/12/lawnmower-Large.jpeg?w=1390&crop=1"></img>
+                <img src={'http://localhost:4000/'+cover} />
             </div>
             <div className="texts">
-                <h2>Full-house battery backup coming later this year</h2>
+                <h2>{title}</h2>
                 <p className="info">
-                    <a className="author">Irina Atanasova</a>
-                    <time>2023-03-23 10:24</time>
+                    <a className="author">{author.username}</a>
+                    <time>{format(new Date(createdAt),'MMM d, yyyy HH:mm')}</time>
                 </p>
                 <p className="summary">
-                    Today at its special launch event, home backup power giant
-                    EcoFlow launched a flurry of new products, including a
-                    “Whole-Home Backup Power Solution."
+                    {summary}
                 </p>
             </div>
         </div>
