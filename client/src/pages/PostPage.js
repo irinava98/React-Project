@@ -30,7 +30,7 @@ export default function PostPage() {
                 <Link className="edit-btn" to={`/edit/${postInfo._id}`}>Edit</Link>
             </div>)}
             <div className="image">
-            <img src={`http://localhost4000/${postInfo.cover}`} />
+            <img src={'http://localhost:4000/'+postInfo.cover} />
             </div>
             <div className="content">{postInfo.content}</div>
          </div>
