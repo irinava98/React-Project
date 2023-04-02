@@ -16,6 +16,14 @@ export default function PostPage() {
         })
     },[]);
 
+    function deletePost() {
+        fetch(`http://localhost:4000/post/${id}`,{
+            method: 'DELETE',
+        }).then(response => {
+            alert("Deleted successfully");
+        });
+    }
+
     if(!postInfo) {
         return '';
     }
@@ -28,6 +36,7 @@ export default function PostPage() {
             {userInfo.id === postInfo.author._id && 
             (<div className="edit-row">
                 <Link className="edit-btn" to={`/edit/${postInfo._id}`}>Edit</Link>
+                <span onClick={deletePost} className="delete-btn">Delete</span>
             </div>)}
             <div className="image">
             <img src={'http://localhost:4000/'+postInfo.cover} />

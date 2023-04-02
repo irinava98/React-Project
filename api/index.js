@@ -23,6 +23,9 @@ mongoose.connect("mongodb://127.0.0.1:27017/blog");
 app.post("/register", async (req, res) => {
     const { username, password } = req.body;
     try {
+        if (password.length < 4) {
+            throw new Error("Password too short");
+        }
         const userDoc = await User.create({
             username,
             password: bcrypt.hashSync(password, salt)
@@ -88,8 +91,6 @@ app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
         });
         res.json(postDoc);
     });
-
-    res.json(postDoc);
 });
 
 app.put("/post", uploadMiddleware.single("file"), async (req, res) => {
@@ -113,7 +114,7 @@ app.put("/post", uploadMiddleware.single("file"), async (req, res) => {
             return res.status(400).json('you are not the author');
         }
 
-        await postDoc.update({
+        await postDoc.updateOne({
             title,
             summary,
             content,
@@ -135,6 +136,12 @@ app.get("/post", async (req, res) => {
 app.get("/post/:id", async (req, res) => {
     const { id } = req.params;
     postDoc = await Post.findById(id).populate("author", ["username"]);
+    res.json(postDoc);
+});
+
+app.delete("/post/:id", async (req, res) => {
+    const {id} = req.params;
+    postDoc = await Post.findByIdAndDelete(id);
     res.json(postDoc);
 });
 
