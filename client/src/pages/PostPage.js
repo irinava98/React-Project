@@ -3,9 +3,12 @@ import {useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext";
 import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+
 export default function PostPage() {
     const [postInfo,setPostInfo] = useState(null);
     const {userInfo} = useContext(UserContext);
+    const [redirect,setRedirect] = useState(false);
     const {id} = useParams();
     useEffect(()=>{
         fetch(`http://localhost:4000/post/${id}`)
@@ -17,15 +20,25 @@ export default function PostPage() {
     },[]);
 
     function deletePost() {
-        fetch(`http://localhost:4000/post/${id}`,{
-            method: 'DELETE',
-        }).then(response => {
-            alert("Deleted successfully");
-        });
+        const confirmedDelete = confirm(`Do you want to delete the item ?`);
+        if (confirmedDelete) {
+            fetch(`http://localhost:4000/post/${id}`,{
+                method: 'DELETE',
+            }).then(response => {
+                alert("Deleted successfully");
+                setRedirect(true);
+            });
+        }  else {
+            setRedirect(true);
+        }
     }
 
     if(!postInfo) {
         return '';
+    }
+
+    if (redirect) {
+        return (<Navigate to = {'/'} />);
     }
 
     return (
