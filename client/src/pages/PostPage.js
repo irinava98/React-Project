@@ -33,41 +33,35 @@ export default function PostPage() {
     }
 
     function likePost(id) {
-        fetch("/like", {
+        fetch("http://localhost:3000/like", {
             method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
                 id
             })
         })
             .then((res) => res.json())
             .then((result) => {
-                const newPostInfo = postInfo.map((item) => {
-                    if (item._id === result._id) {
-                        return result;
-                    } else {
-                        return item;
-                    }
-                });
+                const newPostInfo = postInfo.id === result._id ? result : postInfo;
                 setPostInfo(newPostInfo);
             });
     }
 
     function unlikePost(id) {
-        fetch("/unlike", {
+        fetch("http://localhost:3000/unlike", {
             method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({
                 id
             })
         })
             .then((res) => res.json())
             .then((result) => {
-                const newPostInfo = postInfo.map((item) => {
-                    if (item._id === result._id) {
-                        return result;
-                    } else {
-                        return item;
-                    }
-                });
+                const newPostInfo = postInfo.id === result._id ? result : postInfo;
                 setPostInfo(newPostInfo);
             });
     }
@@ -98,11 +92,17 @@ export default function PostPage() {
             {userInfo.id && userInfo.id !== postInfo.author._id && (
                 <>
                     {postInfo.likes.includes(userInfo.id) ? (
-                        <button id="like-btn" onClick={() => unlikePost(postInfo._id)}>
+                        <button
+                            id="like-btn"
+                            onClick={() => unlikePost(postInfo._id)}
+                        >
                             Unlike
                         </button>
                     ) : (
-                        <button id="unlike-btn" onClick={() => likePost(postInfo._id)}>
+                        <button
+                            id="unlike-btn"
+                            onClick={() => likePost(postInfo._id)}
+                        >
                             Like
                         </button>
                     )}

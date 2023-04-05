@@ -145,7 +145,7 @@ app.delete("/post/:id", async (req, res) => {
     res.json(postDoc);
 });
 
-app.put("/like",async (req, res) => {
+app.put("/like/:id",async (req, res) => {
     const {id} = req.params;
     postDoc = await Post.findByIdAndUpdate(id, {
         $push: {likes: req.userDoc._id}
@@ -154,7 +154,7 @@ app.put("/like",async (req, res) => {
     })
 });
 
-app.put("/unlike",async (req, res) => {
+app.put("/unlike/:id",async (req, res) => {
     const {id} = req.params;
     postDoc = await Post.findByIdAndUpdate(id, {
         $pull: {likes: req.userDoc._id}
