@@ -32,36 +32,36 @@ export default function PostPage() {
         }
     }
 
-    function likePost(id) {
-        fetch("http://localhost:3000/like", {
+    function likePost() {
+        fetch(`http://localhost:3000/like/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                id
+                postInfo
             })
         })
             .then((res) => res.json())
             .then((result) => {
-                const newPostInfo = postInfo.id === result._id ? result : postInfo;
+                const newPostInfo = postInfo._id === result._id ? result : postInfo;
                 setPostInfo(newPostInfo);
             });
     }
 
-    function unlikePost(id) {
-        fetch("http://localhost:3000/unlike", {
+    function unlikePost() {
+        fetch(`http://localhost:3000/like/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                id
+                postInfo
             })
         })
             .then((res) => res.json())
             .then((result) => {
-                const newPostInfo = postInfo.id === result._id ? result : postInfo;
+                const newPostInfo = postInfo._id === result._id ? result : postInfo;
                 setPostInfo(newPostInfo);
             });
     }
@@ -94,14 +94,14 @@ export default function PostPage() {
                     {postInfo.likes.includes(userInfo.id) ? (
                         <button
                             id="like-btn"
-                            onClick={() => unlikePost(postInfo._id)}
+                            onClick={likePost}
                         >
                             Unlike
                         </button>
                     ) : (
                         <button
                             id="unlike-btn"
-                            onClick={() => likePost(postInfo._id)}
+                            onClick={unlikePost}
                         >
                             Like
                         </button>
@@ -111,8 +111,9 @@ export default function PostPage() {
             <h3>{postInfo.likes.length} likes</h3>
             <div className="image">
                 <img src={"http://localhost:4000/" + postInfo.cover} />
+                <div className="content">{postInfo.content}</div>
             </div>
-            <div className="content">{postInfo.content}</div>
+            
         </div>
     );
 }
