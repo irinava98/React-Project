@@ -33,7 +33,7 @@ export default function PostPage() {
     }
 
     function likePost() {
-        fetch(`http://localhost:4000/like/${id}`, {
+        fetch(`http://localhost:4000/post/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -50,7 +50,7 @@ export default function PostPage() {
     }
 
     function unlikePost() {
-        fetch(`http://localhost:4000/unlike/${id}`, {
+        fetch(`http://localhost:4000/post/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
