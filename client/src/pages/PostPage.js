@@ -33,7 +33,7 @@ export default function PostPage() {
     }
 
     function likePost() {
-        fetch(`http://localhost:3000/like/${id}`, {
+        fetch(`http://localhost:4000/like/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -50,7 +50,7 @@ export default function PostPage() {
     }
 
     function unlikePost() {
-        fetch(`http://localhost:3000/like/${id}`, {
+        fetch(`http://localhost:4000/unlike/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -93,15 +93,13 @@ export default function PostPage() {
                 <>
                     {postInfo.likes.includes(userInfo.id) ? (
                         <button
-                            id="like-btn"
-                            onClick={likePost}
+                            onClick={unlikePost}
                         >
                             Unlike
                         </button>
                     ) : (
                         <button
-                            id="unlike-btn"
-                            onClick={unlikePost}
+                            onClick={likePost}
                         >
                             Like
                         </button>
