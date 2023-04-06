@@ -102,7 +102,7 @@ app.put("/post", uploadMiddleware.single("file"), async (req, res) => {
         newPath = path + "." + ext;
         fs.renameSync(path, newPath);
     }
-    const {token} = req.cookies;
+    const { token } = req.cookies;
     jwt.verify(token, secret, {}, async (err, info) => {
         if (err) {
             throw err;
@@ -111,18 +111,17 @@ app.put("/post", uploadMiddleware.single("file"), async (req, res) => {
         const postDoc = await Post.findById(id);
         const isAuthor = postDoc.author == info.id;
         if (!isAuthor) {
-            return res.status(400).json('you are not the author');
+            return res.status(400).json("you are not the author");
         }
 
         await postDoc.updateOne({
             title,
             summary,
             content,
-            cover:newPath ? newPath : postDoc.cover,
+            cover: newPath ? newPath : postDoc.cover
         });
         res.json(postDoc);
     });
-
 });
 
 app.get("/post", async (req, res) => {
@@ -140,27 +139,37 @@ app.get("/post/:id", async (req, res) => {
 });
 
 app.delete("/post/:id", async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     postDoc = await Post.findByIdAndDelete(id);
     res.json(postDoc);
 });
 
-app.put("/post/:id",async (req, res) => {
-    const {id} = req.params;
-    postDoc = await Post.findByIdAndUpdate(id, {
-        $push: {likes: req.userDoc._id}
-    }, {
-        new: true
-    })
+app.put("/post/:id", async (req, res) => {
+    const { id } = req.params;
+    postDoc = await Post.findByIdAndUpdate(
+        id,
+        {
+            $push: { likes: req.body.username}
+        },
+        {
+            new: true
+        }
+    );
+    res.json(postDoc);
 });
 
-app.put("/post/:id",async (req, res) => {
-    const {id} = req.params;
-    postDoc = await Post.findByIdAndUpdate(id, {
-        $pull: {likes: req.userDoc._id}
-    }, {
-        new: true
-    })
+app.put("/post/:id", async (req, res) => {
+    const { id } = req.params;
+    postDoc = await Post.findByIdAndUpdate(
+        id,
+        {
+            $pull: { likes: req.body.username }
+        },
+        {
+            new: true
+        }
+    );
+    res.json(postDoc);
 });
 
 app.listen(4000);
