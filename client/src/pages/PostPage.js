@@ -9,6 +9,7 @@ export default function PostPage() {
     const [postInfo, setPostInfo] = useState(null);
     const { userInfo } = useContext(UserContext);
     const [redirect, setRedirect] = useState(false);
+    const [likes, setLikes] = useState(0);
     const { id } = useParams();
     useEffect(() => {
         fetch(`http://localhost:4000/post/${id}`).then((response) => {
@@ -33,37 +34,11 @@ export default function PostPage() {
     }
 
     function likePost() {
-        fetch(`http://localhost:4000/post/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                postInfo
-            })
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                const newPostInfo = postInfo._id === result._id ? result : postInfo;
-                setPostInfo(newPostInfo);
-            });
+        setLikes((prevLikes) => prevLikes + 1);
     }
 
-    function unlikePost() {
-        fetch(`http://localhost:4000/post/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                postInfo
-            })
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                const newPostInfo = postInfo._id === result._id ? result : postInfo;
-                setPostInfo(newPostInfo);
-            });
+    function dislikePost() {
+        setLikes((prevLikes) => prevLikes - 1);
     }
 
     if (!postInfo) {
@@ -91,27 +66,18 @@ export default function PostPage() {
             )}
             {userInfo.id && userInfo.id !== postInfo.author._id && (
                 <>
-                    {postInfo.likes.includes(userInfo.id) ? (
-                        <button
-                            onClick={unlikePost}
-                        >
-                            Unlike
-                        </button>
+                    {likes > 0 ? (
+                        <button onClick={dislikePost}>Dislike</button>
                     ) : (
-                        <button
-                            onClick={likePost}
-                        >
-                            Like
-                        </button>
+                        <button onClick={likePost}>Like</button>
                     )}
                 </>
             )}
-            <h3>{postInfo.likes.length} likes</h3>
+            <h3>{likes} likes</h3>
             <div className="image">
                 <img src={"http://localhost:4000/" + postInfo.cover} />
                 <div className="content">{postInfo.content}</div>
             </div>
-            
         </div>
     );
 }
