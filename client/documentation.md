@@ -10,4 +10,4 @@ We have these functionalities.
 5. We can edit a post if we are logged in and if we are the author of the post.
 6. We can delete a post if we are logged in and if we are the author of the post.
 7. We can like/unlike a post if we a logged in and the post isn't ours.
-We can logout.
+8. We can logout.
